@@ -1,0 +1,13 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventGridTrigger",
+      "name": "event",
+      "direction": "in",
+	  "eventHubName": "udacity-exam-2-eventhub", 
+	  "connection": "Endpoint=sb://udacity-exam-2-hub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=q0fMWvIQ7VTMpqwwtxUe5RH2/eGAmM1YPDEg82x3Up8="
+    }
+  ]
+}
+

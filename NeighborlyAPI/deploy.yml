@@ -1,0 +1,176 @@
+data:
+  FUNCTIONS_WORKER_RUNTIME: cHl0aG9u
+  AzureWebJobsStorage: RGVmYXVsdEVuZHBvaW50c1Byb3RvY29sPWh0dHBzO0VuZHBvaW50U3VmZml4PWNvcmUud2luZG93cy5uZXQ7QWNjb3VudE5hbWU9dWRhY2l0eWV4YW0yc3RvcmFnZTtBY2NvdW50S2V5PUp2NWFjRWd6Vk0rWDJPOXUwVWhpWGs4VTlUYVkxazlZb1JuSEdGb3U0alBxc2NBaE5IWWpubGZnQzFTS2ViK1ZiVjdRUmdBMVlkSUFZMDRaeG1YeVlnPT0=
+  APPINSIGHTS_INSTRUMENTATIONKEY: ZWUyYTI2NWYtMjYzYS00NzE5LTk1NGUtZjM2ZGVjYzljZmYx
+  FUNCTIONS_EXTENSION_VERSION: fjI=
+  MongoDbUdacityExam2: bW9uZ29kYjovL3VkYWNpdHktZXhhbS0yLWRiOmlhWGY3cGZPUnd0dUZrdkh6Qk9qUk4weGxKU3g3UlJPdk1RbjdSblpKbERQbDhFc0Z4Nk54M0U1bjVBUlZtb0FxVHdGTFRIUjVvczl2dXB6QnRvUlZBPT1AdWRhY2l0eS1leGFtLTItZGIubW9uZ28uY29zbW9zLmF6dXJlLmNvbToxMDI1NS8/c3NsPXRydWUmcmVwbGljYVNldD1nbG9iYWxkYiZyZXRyeXdyaXRlcz1mYWxzZSZtYXhJZGxlVGltZU1TPTEyMDAwMCZhcHBOYW1lPUB1ZGFjaXR5LWV4YW0tMi1kYkA=
+  WEBSITE_NODE_DEFAULT_VERSION: fjEw
+apiVersion: v1
+kind: Secret
+metadata:
+  name: udacityexam2cluster
+  namespace: default
+---
+data:
+  host.master: bzd5L2wwT2FZQnpJUk5OSGVWTEdVYnNYclhtbFovbExwWTZEQUZqOUhOc1dmWEhMUWRUYm5nPT0=
+  host.function.default: UjBrY2ZSaWVmck9pT2czRmpZaWlsbUEya3EwQnh6UGhSa2hRSnUyMUZSZG9mL0s2ZXR6eUJnPT0=
+  host.systemKey.default: dkdnamxxRGVjYU9qbGFaeDhXc3BNV2NITWFwVHRaclRQTnJ0QnpkVEE5MGxxcWg0bWxyYWVBPT0=
+  functions.createadvertisement.default: dkRqV0JDSTM1bTF5bWViYXFxM3YzemJMNHE0dzgwQm4zdkFDSDdZclVmVWk5SE9pZDdTVmJnPT0=
+  functions.deleteadvertisement.default: TldwVjg0cUFOVkduY251OS92d3prZVcvOFNDajF2UXpnd1VzQ3c1MG01Z01pTHV2SkphdS9RPT0=
+  functions.getadvertisement.default: eEFmNTRhaXROS01ubmtia0d0Wm03RmFnUTliWWNNNHNGRnZ2T2o0dzk4ZjV3S1dqbm9rSllBPT0=
+  functions.getadvertisements.default: V0VOY0VJTy82UGlNTEQ0MDVpQnBaTXJyUmg5cGZHVzRiS0tkVGs4NE4wTmZmcVFrVVI2U2tnPT0=
+  functions.getpost.default: WDYvL21sSHJ2QU54d1BnTGYxbVhDYVZnU0VwdlBjak5oOW50cW5TVXdOSFhWNTlUamRuYTB3PT0=
+  functions.getposts.default: dG50MmpqZnM2NHJWY0NwNU4waTZJbXlhSGpxMUZWMVROT1RvaUlFcVhicXljdVpDVGFacnJBPT0=
+  functions.updateadvertisement.default: Rnk5Wk5oc2VGVW83RkxRMDVMNGdObzc0VW13c2VmR3JlQXdGMlp2VUhocUxaUi80ZklUNGRnPT0=
+apiVersion: v1
+kind: Secret
+metadata:
+  name: func-keys-kube-secret-udacityexam2cluster
+  namespace: default
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: udacityexam2cluster-function-keys-identity-svc-act
+  namespace: default
+---
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  - configMaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: functions-keys-manager-role
+  namespace: default
+---
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: functions-keys-manager-role
+subjects:
+- kind: ServiceAccount
+  name: udacityexam2cluster-function-keys-identity-svc-act
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: udacityexam2cluster-function-keys-identity-svc-act-functions-keys-manager-rolebinding
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: udacityexam2cluster-http
+  namespace: default
+spec:
+  selector:
+    app: udacityexam2cluster-http
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacityexam2cluster-http
+  namespace: default
+  labels:
+    app: udacityexam2cluster-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: udacityexam2cluster-http
+  template:
+    metadata:
+      labels:
+        app: udacityexam2cluster-http
+    spec:
+      containers:
+      - name: udacityexam2cluster-http
+        image: udacityexam2registry.azurecr.io/udacityexam2image:v1
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: createAdvertisement
+        - name: AzureFunctionsJobHost__functions__1
+          value: deleteAdvertisement
+        - name: AzureFunctionsJobHost__functions__2
+          value: getAdvertisement
+        - name: AzureFunctionsJobHost__functions__3
+          value: getAdvertisements
+        - name: AzureFunctionsJobHost__functions__4
+          value: getPost
+        - name: AzureFunctionsJobHost__functions__5
+          value: getPosts
+        - name: AzureFunctionsJobHost__functions__6
+          value: updateAdvertisement
+        - name: AzureWebJobsSecretStorageType
+          value: kubernetes
+        - name: AzureWebJobsKubernetesSecretName
+          value: secrets/func-keys-kube-secret-udacityexam2cluster
+        envFrom:
+        - secretRef:
+            name: udacityexam2cluster
+      serviceAccountName: udacityexam2cluster-function-keys-identity-svc-act
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udacityexam2cluster
+  namespace: default
+  labels:
+    app: udacityexam2cluster
+spec:
+  selector:
+    matchLabels:
+      app: udacityexam2cluster
+  template:
+    metadata:
+      labels:
+        app: udacityexam2cluster
+    spec:
+      containers:
+      - name: udacityexam2cluster
+        image: udacityexam2registry.azurecr.io/udacityexam2image:v1
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: eventHubTrigger
+        envFrom:
+        - secretRef:
+            name: udacityexam2cluster
+      serviceAccountName: udacityexam2cluster-function-keys-identity-svc-act
+---
+apiVersion: keda.k8s.io/v1alpha1
+kind: ScaledObject
+metadata:
+  name: udacityexam2cluster
+  namespace: default
+  labels:
+    deploymentName: udacityexam2cluster
+spec:
+  scaleTargetRef:
+    deploymentName: udacityexam2cluster
+  triggers:
+  - type: eventgridtrigger
+    metadata:
+      type: eventGridTrigger
+      name: event
+      direction: in
+      eventHubName: udacity-exam-2-eventhub
+      connection: Endpoint=sb://udacity-exam-2-hub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=q0fMWvIQ7VTMpqwwtxUe5RH2/eGAmM1YPDEg82x3Up8=
+---
+
